@@ -18,6 +18,15 @@ namespace cpcl::dynlib {
 		dynamic_library_handle(void* native_handle) : native_handle(native_handle) {}
 
 	public:
+		~dynamic_library_handle() {
+			if (this->native_handle)
+#ifdef _WIN32
+				FreeLibrary(static_cast<HMODULE>(this->native_handle);
+#elifdef __linux__
+				dlclose(this->native_module);
+#endif
+		}
+
 		static std::expected<dynamic_library_handle, std::errc> open_library(std::string&& filename) {
 			if (!std::filesystem::exists(filename)) {
 #ifdef _WIN32
